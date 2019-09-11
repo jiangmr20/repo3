@@ -1,0 +1,1 @@
+http://www.heminjie.com/system/linux/6547.html/comment-page-1
