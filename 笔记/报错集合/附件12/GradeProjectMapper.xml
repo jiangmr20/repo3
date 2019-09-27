@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn21.opmm.dao.gradeCenter.GradeProjectMapper">
+    <resultMap id="projectMap" type="com.cn21.opmm.domain.gradeCenter.GradeProject">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="user_dept_id" jdbcType="INTEGER" property="userDeptId" />
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="initiation_time" jdbcType="TIMESTAMP" property="initiationTime" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="requirement" jdbcType="VARCHAR" property="requirement" />
+        <result column="attachment" jdbcType="VARCHAR" property="attachment" />
+        <result column="is_submit" jdbcType="TINYINT" property="hasSubmit" />
+        <result column="grade_range" jdbcType="VARCHAR" property="gradeRange" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <collection property="gradeObjectList" ofType="com.cn21.opmm.domain.gradeCenter.GradeObject">
+            <id column="objId" jdbcType="INTEGER" property="id" />
+            <result column="objName" jdbcType="VARCHAR" property="name" />
+            <result column="objUserDeptId" jdbcType="INTEGER" property="userDeptId" />
+            <result column="model_id" jdbcType="INTEGER" property="modelId" />
+            <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+            <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+            <result column="status" jdbcType="TINYINT" property="status" />
+            <result column="project_id" jdbcType="INTEGER" property="projectId" />
+            <result column="method" jdbcType="INTEGER" property="method" />
+            <result column="is_view_score" jdbcType="TINYINT" property="hasViewScore" />
+            <result column="is_view_reason" jdbcType="TINYINT" property="hasViewReason" />
+            <result column="position_id" jdbcType="INTEGER" property="positionId" />
+            <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
+            <result column="objUserName" jdbcType="VARCHAR" property="userName" />
+            <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="objectDetailMap" type="com.cn21.opmm.domain.gradeCenter.GradeObject">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="project_id" jdbcType="INTEGER" property="projectId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="model_id" jdbcType="INTEGER" property="modelId" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="user_dept_id" jdbcType="INTEGER" property="userDeptId" />
+        <result column="method" jdbcType="TINYINT" property="method" />
+        <result column="is_view_score" jdbcType="TINYINT" property="hasViewScore" />
+        <result column="is_view_reason" jdbcType="TINYINT" property="hasViewReason" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+        <result column="position_id" jdbcType="INTEGER" property="positionId" />
+        <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
+        <result column="projectName" jdbcType="VARCHAR" property="projectName" />
+        <result column="projectSponsorId" jdbcType="INTEGER" property="projectSponsorId" />
+        <result column="gradeRange" jdbcType="VARCHAR" property="gradeRange" />
+        <collection property="gradeList" ofType="com.cn21.opmm.domain.gradeCenter.Grade">
+            <id column="gId" jdbcType="INTEGER" property="id" />
+            <result column="grade_dept_id" jdbcType="INTEGER" property="gradeDeptId" />
+            <result column="grade" jdbcType="INTEGER" property="grade" />
+            <result column="reason" jdbcType="VARCHAR" property="reason" />
+            <result column="gModelDetailId" jdbcType="INTEGER" property="modelDetailId" />
+            <result column="gObjId" jdbcType="INTEGER" property="objId" />
+            <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+            <result column="gUserDeptId" jdbcType="INTEGER" property="userDeptId" />
+            <result column="gPositionId" jdbcType="INTEGER" property="positionId" />
+            <result column="gDeptCode" jdbcType="VARCHAR" property="deptCode" />
+            <result column="email" jdbcType="VARCHAR" property="email" />
+            <result column="gUserName" jdbcType="VARCHAR" property="userName" />
+            <result column="prefer_mobile" jdbcType="VARCHAR" property="mobile" />
+            <result column="hasGrade" jdbcType="TINYINT" property="hasGrade" />
+        </collection>
+        <collection property="gradeDeptList" ofType="com.cn21.opmm.domain.gradeCenter.GradeDept">
+            <id column="gdId" jdbcType="INTEGER" property="id" />
+            <result column="gdObjId" jdbcType="INTEGER" property="objId" />
+            <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+            <result column="min_num" jdbcType="INTEGER" property="minNum" />
+            <result column="max_num" jdbcType="INTEGER" property="maxNum" />
+            <result column="deptName" jdbcType="VARCHAR" property="deptName" />
+            <result column="gradeCount" jdbcType="INTEGER" property="gradeCount" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="gradeMap" type="com.cn21.opmm.domain.gradeCenter.Grade">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="grade_dept_id" jdbcType="INTEGER" property="gradeDeptId" />
+        <result column="grade" jdbcType="INTEGER" property="grade" />
+        <result column="reason" jdbcType="VARCHAR" property="reason" />
+        <result column="model_detail_id" jdbcType="INTEGER" property="modelDetailId" />
+        <result column="obj_id" jdbcType="INTEGER" property="objId" />
+        <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+        <result column="user_dept_id" jdbcType="INTEGER" property="userDeptId" />
+        <result column="position_id" jdbcType="INTEGER" property="positionId" />
+        <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+    </resultMap>
+
+    <resultMap id="gradeDetailMap" type="com.cn21.opmm.domain.gradeCenter.GradeObject">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="project_id" jdbcType="INTEGER" property="projectId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="model_id" jdbcType="INTEGER" property="modelId" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="user_dept_id" jdbcType="INTEGER" property="userDeptId" />
+        <result column="method" jdbcType="TINYINT" property="method" />
+        <result column="is_view_score" jdbcType="TINYINT" property="hasViewScore" />
+        <result column="is_view_reason" jdbcType="TINYINT" property="hasViewReason" />
+        <result column="position_id" jdbcType="INTEGER" property="positionId" />
+        <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
+        <result column="projectName" jdbcType="VARCHAR" property="projectName" />
+        <result column="projectSponsorId" jdbcType="INTEGER" property="projectSponsorId" />
+        <result column="gradeRange" jdbcType="VARCHAR" property="gradeRange" />
+        <collection property="gradeModelDetailList" ofType="com.cn21.opmm.domain.gradeCenter.GradeModelDetail">
+            <id column="mdId" jdbcType="INTEGER" property="id" />
+            <result column="mId" jdbcType="INTEGER" property="modelId" />
+            <result column="direction" jdbcType="VARCHAR" property="direction" />
+            <result column="title" jdbcType="VARCHAR" property="title" />
+            <result column="description" jdbcType="VARCHAR" property="description" />
+            <result column="weight" jdbcType="DECIMAL" property="weight" />
+            <collection property="gradeList" ofType="com.cn21.opmm.domain.gradeCenter.Grade">
+                <id column="gId" jdbcType="INTEGER" property="id" />
+                <result column="grade_dept_id" jdbcType="INTEGER" property="gradeDeptId" />
+                <result column="grade" jdbcType="INTEGER" property="grade" />
+                <result column="reason" jdbcType="VARCHAR" property="reason" />
+                <result column="model_detail_id" jdbcType="INTEGER" property="modelDetailId" />
+                <result column="obj_id" jdbcType="INTEGER" property="objId" />
+                <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+                <result column="gPositionId" jdbcType="INTEGER" property="positionId" />
+                <result column="gDeptCode" jdbcType="VARCHAR" property="deptCode" />
+                <result column="gUserDeptId" jdbcType="INTEGER" property="userDeptId" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--评分项目-->
+    <insert id="insertGradeProject" parameterType="com.cn21.opmm.domain.gradeCenter.GradeProject">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_grade_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="userDeptId != null">
+                user_dept_id,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="initiationTime != null">
+                initiation_time,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="requirement != null">
+                requirement,
+            </if>
+            <if test="attachment != null">
+                attachment,
+            </if>
+            <if test="hasSubmit != null">
+                is_submit,
+            </if>
+            <if test="gradeRange != null">
+                grade_range,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userDeptId != null">
+                #{userDeptId,jdbcType=INTEGER},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="initiationTime != null">
+                #{initiationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="requirement != null">
+                #{requirement,jdbcType=VARCHAR},
+            </if>
+            <if test="attachment != null">
+                #{attachment,jdbcType=VARCHAR},
+            </if>
+            <if test="hasSubmit != null">
+                #{hasSubmit,jdbcType=TINYINT},
+            </if>
+            <if test="gradeRange != null">
+                #{gradeRange,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateGradeProject" parameterType="com.cn21.opmm.domain.gradeCenter.GradeProject">
+        update tb_grade_project
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName != null">
+                dept_name = #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="initiationTime != null">
+                initiation_time = #{initiationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="requirement != null">
+                requirement = #{requirement,jdbcType=VARCHAR},
+            </if>
+            <if test="attachment != null">
+                attachment = #{attachment,jdbcType=VARCHAR},
+            </if>
+            <if test="hasSubmit != null">
+                is_submit = #{hasSubmit,jdbcType=TINYINT},
+            </if>
+            <if test="gradeRange != null">
+                grade_range = #{gradeRange,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER} and user_dept_id = #{userDeptId,jdbcType=INTEGER} and is_submit = 0
+    </update>
+
+    <select id="selectGradeProjectListByMap" parameterType="java.util.Map" resultMap="projectMap">
+        select tgp.*,tnu.user_name, tgo.id as objId, tgo.name as objName, tgo.user_dept_id as objUserDeptId,
+        tgo.model_id, tgo.start_time, tgo.end_time, tgo.status, tgo.project_id, tgo.method, tgo.is_view_score,
+        tgo.is_view_reason, tgo.position_id, tnup.user_name as objUserName, tgm.name as modelName, tnup.dept_code
+        from tb_grade_project tgp
+        left join tb_new_rel_user_department tnrud on tnrud.id = tgp.user_dept_id
+        left join tb_new_user tnu on tnrud.user_id = tnu.user_id
+        left join tb_grade_object tgo on tgp.id = tgo.project_id
+        left join tb_grade_model tgm on tgo.model_id = tgm.id
+        left join tb_new_user_position tnup on tgo.position_id = tnup.id
+        where 1 = 1
+        <if test="keyword != null">
+            and instr(tgp.name, #{keyword}) > 0
+        </if>
+        <if test="userDeptId != null">
+            and tgp.user_dept_id = #{userDeptId,jdbcType=INTEGER}
+        </if>
+        <if test="id != null">
+            and tgp.id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="userId != null">
+            and (tgp.user_dept_id = #{userId,jdbcType=INTEGER} or (tgo.user_dept_id = #{userId,jdbcType=INTEGER} and tgp.is_submit = 1))
+        </if>
+        <if test="sort != null and order != null">
+            order by ${sort} ${order}
+        </if>
+
+    </select>
+
+    <!--评分对象-->
+    <insert id="insertGradeObject" parameterType="com.cn21.opmm.domain.gradeCenter.GradeObject">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_grade_object
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="userDeptId != null">
+                user_dept_id,
+            </if>
+            <if test="modelId != null">
+                model_id,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="hasViewScore != null">
+                is_view_score,
+            </if>
+            <if test="hasViewReason != null">
+                is_view_reason,
+            </if>
+            <if test="positionId != null">
+                position_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userDeptId != null">
+                #{userDeptId,jdbcType=INTEGER},
+            </if>
+            <if test="modelId != null">
+                #{modelId,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=TINYINT},
+            </if>
+            <if test="hasViewScore != null">
+                #{hasViewScore,jdbcType=TINYINT},
+            </if>
+            <if test="hasViewReason != null">
+                #{hasViewReason,jdbcType=TINYINT},
+            </if>
+            <if test="positionId != null">
+                #{positionId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertGradeObjects" parameterType="com.cn21.opmm.domain.gradeCenter.GradeObject">
+        insert into tb_grade_object
+        (id, name, user_dept_id, model_id, start_time, end_time, status, project_id, method, is_view_score, is_view_reason, position_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=INTEGER},#{item.name,jdbcType=VARCHAR},
+            #{item.userDeptId,jdbcType=INTEGER},#{item.modelId,jdbcType=INTEGER},
+            #{item.startTime,jdbcType=TIMESTAMP},#{item.endTime,jdbcType=TIMESTAMP},
+            #{item.status,jdbcType=TINYINT},#{item.projectId,jdbcType=INTEGER},
+            #{item.method,jdbcType=TINYINT},#{item.hasViewScore,jdbcType=TINYINT},
+            #{item.hasViewReason,jdbcType=TINYINT},#{item.positionId,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteGradeObjectsByProjectId" parameterType="java.lang.Integer">
+        delete from tb_grade_object where project_id = #{projectId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateGradeObject" parameterType="com.cn21.opmm.domain.gradeCenter.GradeObject">
+        update tb_grade_object
+        <set>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="hasViewScore != null">
+                is_view_score = #{hasViewScore,jdbcType=TINYINT},
+            </if>
+            <if test="hasViewReason != null">
+                is_view_reason = #{hasViewReason,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER} and user_dept_id =  #{userDeptId,jdbcType=INTEGER} and status != 4
+    </update>
+
+    <!--选出已提交的评分项目下的评分对象-->
+    <select id="selectGradeObjectListByMap" parameterType="java.util.Map" resultMap="objectDetailMap">
+        select tgo.*, tgp.name as projectName, tgm.name as modelName, tnu.user_name as userName
+        from tb_grade_object tgo
+        left join tb_grade_project tgp on tgo.project_id = tgp.id
+        left join tb_grade_model tgm on tgo.model_id = tgm.id
+        left join tb_new_rel_user_department tnrud on tnrud.id = tgo.user_dept_id
+        left join tb_new_user tnu on tnrud.user_id = tnu.user_id
+        where tgp.is_submit = 1
+        <if test="id != null">
+            and tgo.id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="projectId != null">
+            and tgp.id = #{projectId,jdbcType=INTEGER}
+        </if>
+        <if test="userId != null">
+            and (tgp.user_dept_id = #{userId,jdbcType=INTEGER} or tgo.user_dept_id = #{userId,jdbcType=INTEGER})
+        </if>
+        <if test="sort != null and order != null">
+            order by ${sort} ${order}
+        </if>
+    </select>
+
+    <select id="selectGradeDetailCountByMap" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*)
+        from tb_grade_object tgo
+        inner join tb_grade_project tgp on tgo.project_id = tgp.id
+        where 1=1
+        <if test="id != null">
+            and tgo.id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="projectId != null">
+            and tgp.id = #{projectId,jdbcType=INTEGER}
+        </if>
+        <if test="method != null">
+            and tgo.method = #{method,jdbcType=INTEGER}
+        </if>
+        <if test="userDeptId != null">
+            and tgo.user_dept_id = #{userDeptId,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            and tgo.status =  #{status,jdbcType=TINYINT}
+        </if>
+        <if test="hasUpdate != null">
+            and (tgo.status = 1 or tgo.status = 2)
+        </if>
+        <if test="hasSubmit != null">
+            and tgp.is_submit = #{hasSubmit,jdbcType=TINYINT}
+        </if>
+        <if test="userId != null">
+            and (tgo.user_dept_id = #{userId,jdbcType=INTEGER} or tgp.user_dept_id = #{userId,jdbcType=INTEGER})
+        </if>
+    </select>
+
+    <select id="selectGradeObjectWithIssuedById" resultMap="objectDetailMap">
+        select distinct tgo.*, tgp.name as projectName,
+        tgp.grade_range as gradeRange, tgd.id as gdId,
+        tgd.min_num, tgd.max_num, tno.name as deptName, tgd.dept_id
+        from tb_grade_object tgo
+        left join tb_grade_project tgp on tgo.project_id = tgp.id
+        left join tb_grade_dept tgd on tgo.id = tgd.obj_id
+        left join tb_new_organization tno on tgd.dept_id = tno.department_id
+        where tgo.method = 2 and tgo.id = #{id,jdbcType=INTEGER} and tgo.user_dept_id = #{userDeptId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectGradeObjectDetailWithAssignGraderByMap" resultMap="objectDetailMap">
+        select distinct tgo.*, tgp.name as projectName,
+        tgp.grade_range as gradeRange, tg.user_dept_id as gUserDeptId,
+        case when tg.id is null then null else (case when tg.grade is null then 0 else 1 end) end as hasGrade,
+        tnup.user_name as gUserName, tnup.mail as email, tnup.dept_code as gDeptCode,
+        tnup.id as gPositionId, tnup.prefer_mobile
+        from tb_grade_object tgo
+        left join tb_grade_project tgp on tgo.project_id = tgp.id
+        left join tb_grade tg on tgo.id = tg.obj_id
+        left join tb_new_user_position tnup on tg.position_id = tnup.id
+        where tgo.method = 1 and tgo.id = #{id,jdbcType=INTEGER}
+        <if test="hasGrade == 0">
+            and tg.grade is null
+        </if>
+        <if test="hasGrade == 1">
+            and tg.grade is not null
+        </if>
+        <if test="userDeptId != null">
+            and tgo.user_dept_id = #{userDeptId,jdbcType=INTEGER}
+        </if>
+        <if test="userId != null">
+            and (tgo.user_dept_id = #{userId,jdbcType=INTEGER} or tgp.user_dept_id = #{userId,jdbcType=INTEGER})
+        </if>
+    </select>
+
+    <select id="selectGradeObjectDetailWithIssuedById" resultMap="objectDetailMap">
+        select tgo.*, tgp.name as projectName, tgp.user_dept_id as projectSponsorId,
+        tgd.dept_id, tgd.min_num, tgd.max_num,
+        tno.name as deptName, count(distinct tg.user_dept_id) as gradeCount
+        from tb_grade_object tgo
+        inner join tb_grade_project tgp on tgo.project_id = tgp.id
+        inner join tb_grade_dept tgd on tgo.id = tgd.obj_id
+        inner join tb_new_organization tno on tgd.dept_id = tno.department_id
+        left join tb_grade tg on tg.obj_id = tgo.id and tgd.id = tg.grade_dept_id
+        where tgo.method = 2 and tgo.id = #{id,jdbcType=INTEGER}
+        <if test="userDeptId">
+            and (tgo.user_dept_id = #{userDeptId,jdbcType=INTEGER} or tgp.user_dept_id = #{userDeptId,jdbcType=INTEGER})
+        </if>
+        group by tgd.id
+    </select>
+
+    <!--评分-->
+    <select id="selectGradeByMap" parameterType="java.util.Map" resultMap="gradeMap">
+        select distinct tg.user_dept_id, tnu.user_name as userName, tnu.email as email
+        from tb_grade tg
+        left join tb_new_rel_user_department tnrud on tg.user_dept_id = tnrud.id
+        left join tb_new_user tnu on tnrud.user_id = tnu.user_id
+        where 1 = 1
+        <if test="userDeptId != null">
+            and tg.user_dept_id = #{userDeptId,jdbcType=INTEGER}
+        </if>
+        <if test="gradeDeptId != null">
+            and tg.grade_dept_id = #{gradeDeptId,jdbcType=INTEGER}
+        </if>
+        <if test="objId != null">
+            and tg.obj_id = #{objId,jdbcType=INTEGER}
+        </if>
+        <if test="hasGrade != null">
+            and tg.grade is not null
+        </if>
+    </select>
+
+    <delete id="deleteGradeByObjectId" parameterType="java.lang.Integer">
+        delete from tb_grade where obj_id = #{objectId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="batchInsertGrade" parameterType="com.cn21.opmm.domain.gradeCenter.Grade">
+        insert into tb_grade(id, user_dept_id, grade_dept_id, grade, reason, model_detail_id, obj_id, submit_time, position_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=INTEGER},#{item.userDeptId,jdbcType=INTEGER},
+            #{item.gradeDeptId,jdbcType=INTEGER},#{item.grade,jdbcType=INTEGER},
+            #{item.reason,jdbcType=VARCHAR},#{item.modelDetailId,jdbcType=INTEGER},
+            #{item.objId,jdbcType=INTEGER},#{item.submitTime,jdbcType=TIMESTAMP},
+            #{item.positionId,jdbcType=INTEGER})
+        </foreach>
+        on duplicate key update
+        grade = values(grade),
+        reason = values(reason),
+        submit_time = values(submit_time)
+    </insert>
+
+    <!--评分区间-->
+    <select id="selectGradeRangeByPrimaryKey" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select grade_range from tb_grade_range where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--评分详情-->
+    <select id="selectGradeDetailByMap" parameterType="java.util.Map" resultMap="gradeDetailMap">
+        select tgo.*, tgp.name as projectName, tgp.user_dept_id as projectSponsorId,
+        tgp.grade_range as gradeRange, tgmd.id as mdId, tgmd.model_id as mId,
+        tgmd.direction, tgmd.title, tgmd.description, tgmd.weight, tg.id as gId,
+        tg.grade_dept_id, tg.grade, tg.reason, tg.model_detail_id, tg.obj_id,
+        tg.submit_time, tg.user_dept_id as gUserDeptId
+        from tb_grade_object tgo
+        left join tb_grade_project tgp on tgo.project_id = tgp.id
+        left join tb_grade_model_detail tgmd on tgo.model_id = tgmd.model_id
+        left join tb_grade tg on tg.obj_id = tgo.id and tgmd.id = tg.model_detail_id
+        where tgo.id = #{objId,jdbcType=INTEGER}
+        <if test="hasGrade != null">
+            and tg.grade is not null
+        </if>
+        <if test="personId != null">
+            and tg.user_dept_id = #{personId,jdbcType=INTEGER}
+        </if>
+        <if test="managerId != null">
+            and (tgo.user_dept_id = #{managerId,jdbcType=INTEGER} or tgp.user_dept_id = #{managerId,jdbcType=INTEGER})
+        </if>
+    </select>
+
+    <!--评分发布单位-->
+    <delete id="deleteGradeDeptByObjectId" parameterType="java.lang.Integer">
+        delete from tb_grade_dept where obj_id = #{objectId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="batchInsertGradeDept" parameterType="com.cn21.opmm.domain.gradeCenter.GradeDept">
+        insert into tb_grade_dept (obj_id, dept_id, min_num, max_num)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.objId,jdbcType=INTEGER},#{item.deptId,jdbcType=INTEGER},
+            #{item.minNum,jdbcType=INTEGER},#{item.maxNum,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn21.opmm.dao.gradeCenter.GradeTaskMapper">
+
+    <resultMap id="gradeProject" type="com.cn21.opmm.domain.gradeCenter.GradeProject">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="user_dept_id" property="userDeptId" />
+        <result column="deptName" property="deptName" />
+        <result column="create_time" property="createTime" />
+        <result column="initiation_time" property="initiationTime" />
+        <result column="description" property="description" />
+        <result column="requirement" property="requirement" />
+        <result column="attachId" property="attachId" />
+        <result column="is_submit" property="isSubmit" />
+        <result column="gradeRange" property="gradeRange" />
+    </resultMap>
+
+    <resultMap id="grade" type="com.cn21.opmm.domain.gradeCenter.Grade">
+        <id column="id" property="id" />
+        <result column="user_dept_id" property="userDeptId" />
+        <result column="grade_dept_id" property="gradeDeptId" />
+        <result column="grade" property="grade" />
+        <result column="reason" property="reason" />
+        <result column="model_detail_id" property="modelDetailId" />
+        <result column="obj_id" property="objectId" />
+        <result column="submit_time" property="submitTime" />
+    </resultMap>
+
+    <select id="selectStatusFromObject" resultType="java.lang.String">
+        select
+        status
+        from
+        tb_grade_object
+        where
+        id = #{objectId}
+    </select>
+
+    <select id="selectForGetList" resultType="map">
+        SELECT DISTINCT
+        a.project_id id,
+        c.name,
+        a.id objectId,
+        a.name objectName,
+        a.start_time startDate,
+        a.end_time endDate,
+        a.method publishType
+        FROM
+        tb_grade_object a
+        INNER JOIN tb_grade_project c ON a.project_id = c.id
+        INNER JOIN tb_grade b ON b.obj_id = a.id
+        WHERE
+        b.user_dept_id = #{userDeptId}
+        <if test="publishType != null">
+            and a.method = 1
+        </if>
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+        <if test="keyword != null">
+            and a.name like #{keyword}
+        </if>
+        <choose>
+            <when test="hasGrade.toString() == '0'.toString()">
+                and b.grade is null
+            </when>
+            <otherwise>
+                and b.grade is not null
+            </otherwise>
+        </choose>
+        <if test="beforeSize != null and pageSize != null">
+            LIMIT
+            #{beforeSize}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="selectForGetListInUnit" resultType="map">
+        SELECT DISTINCT
+        a.project_id id,
+        c.name,
+        a.id objectId,
+        a.name objectName,
+        a.start_time startDate,
+        a.end_time endDate,
+        a.method publishType
+        FROM
+        tb_grade_object a
+        INNER JOIN tb_grade_project c ON a.project_id = c.id
+        INNER JOIN tb_grade_dept b ON b.obj_id = a.id
+        LEFT JOIN tb_grade d ON d.obj_id = a.id AND d.grade_dept_id = b.id
+        WHERE
+        b.dept_id = #{departmentId}
+        and a.method = 2
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+        <if test="keyword != null">
+            and a.name like #{keyword}
+        </if>
+        <choose>
+            <when test="hasGrade.toString() == '1'.toString()">
+                and
+                d.user_dept_id = #{userDeptId}
+            </when>
+            <otherwise>
+                and
+                (
+                d.user_dept_id IS NULL
+                OR
+                d.user_dept_id != #{userDeptId}
+                )
+            </otherwise>
+        </choose>
+        <if test="beforeSize != null and pageSize != null">
+            LIMIT
+            #{beforeSize}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="selectAllForGetListInUnit" resultType="map">
+        SELECT DISTINCT
+        a.project_id id,
+        c.name,
+        a.id objectId,
+        a.name objectName,
+        a.start_time startDate,
+        a.end_time endDate,
+        a.method publishType,
+        d.user_dept_id userDeptId
+        FROM
+        tb_grade_object a
+        INNER JOIN tb_grade_project c ON a.project_id = c.id
+        INNER JOIN tb_grade_dept b ON b.obj_id = a.id
+        LEFT JOIN tb_grade d ON d.obj_id = a.id AND d.grade_dept_id = b.id
+        WHERE
+        b.dept_id = #{departmentId}
+        and a.method = 2
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+        <if test="keyword != null">
+            and a.name like #{keyword}
+        </if>
+        <if test="beforeSize != null and pageSize != null">
+            LIMIT
+            #{beforeSize}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="selectItemsForGetDetail" resultType="java.util.Map">
+		select
+        d.id id,
+        d.title title,
+        d.weight weight,
+        d.description state,
+        b.grade grade,
+        b.id gradeId,
+        b.reason reason
+		from
+        tb_grade b
+        INNER JOIN tb_grade_model_detail d ON d.id = b.model_detail_id
+        INNER JOIN tb_grade_object c ON b.obj_id = c.id
+        WHERE
+        c.id = #{objectId}
+        and
+        c.project_id = #{id}
+        and
+        b.user_dept_id = #{userDeptId}
+	</select>
+
+    <select id="selectItemsForGetDetailInUnit" resultType="java.util.Map">
+		select
+        d.id id,
+        d.title title,
+        d.weight weight,
+        d.description state
+		from
+        tb_grade_model_detail d
+        INNER JOIN tb_grade_model c ON c.id = d.model_id
+        INNER JOIN tb_grade_object b ON b.model_id = d.model_id
+        WHERE
+        b.id = #{objectId}
+        and
+        b.project_id = #{id}
+	</select>
+
+    <select id="selectProduceForGetDetail" resultType="map">
+        select
+        a.name name,
+        c.name objectName,
+        a.grade_range gradeRange
+        from
+        tb_grade_object c
+        INNER JOIN tb_grade_project a ON a.id = c.project_id
+        WHERE
+        c.id = #{objectId}
+        and
+        c.project_id = #{id}
+    </select>
+
+    <select id="selectUnitIdForGetDetail" resultType="java.lang.String">
+        select
+        dept_id
+        from
+        tb_grade_dept
+        where
+        obj_id = #{objectId}
+    </select>
+
+    <select id="selectGradeIds" resultType="java.lang.String">
+        select
+        b.id gradeId
+		from
+        tb_grade b
+        INNER JOIN tb_grade_model_detail d ON d.id = b.model_detail_id
+        INNER JOIN tb_grade_object c ON b.obj_id = c.id
+        WHERE
+        c.id = #{objectId}
+        and
+        c.project_id = #{id}
+        and
+        b.user_dept_id = #{userDeptId}
+    </select>
+
+    <delete id="delGradeByIds" parameterType="java.lang.Integer">
+        delete from tb_grade where id in
+        <foreach collection="list" open="(" close=")" item="item" separator="," >
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insertGrade" parameterType="com.cn21.opmm.domain.gradeCenter.Grade" >
+        insert into tb_grade(id, user_dept_id, grade_dept_id, grade, reason, model_detail_id, obj_id, submit_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.userDeptId},#{item.gradeDeptId},#{item.grade},#{item.reason},#{item.modelDetailId},#{item.objId},#{item.submitTime})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        grade = values(grade),
+        reason = values(reason),
+        submit_time = values(submit_time)
+</insert>
+
+    <select id="selectMethodFromObjId" resultType="java.lang.String">
+        select
+        method
+        from
+        tb_grade_object
+        where
+        id = #{objectId}
+    </select>
+
+    <select id="countNoSubmitInGrade" resultType="java.lang.Integer">
+        select count(*)
+        from
+        tb_grade
+        where
+        obj_id = #{objectId}
+        and
+        submit_time is null
+    </select>
+    <select id="countNumOfGrade" resultType="java.lang.Integer">
+        select count(*)
+        from
+        tb_grade
+        where
+        obj_id = #{objectId}
+    </select>
+    <update id="updateStatusAndEndTime">
+        update tb_grade_object set status = '4', end_time = #{endTime,jdbcType=TIMESTAMP}
+		where id = #{objectId}
+    </update>
+
+    <select id="selectMaxNumFromDept" resultType="java.lang.Integer">
+        select
+        max_num
+        from
+        tb_grade_dept
+        where
+        obj_id = #{objectId}
+        and
+        dept_id = #{departmentId}
+    </select>
+    <!--<update id="updateGrade">
+        update tb_grade set user_dept_id=#{userDeptId}, grade=#{grade}, reason=#{reason},
+        model_detail_id=#{modelDetailId}, obj_id=#{objId}, submit_time=#{submitTime}
+		where id = #{id}
+    </update>-->
+
+    <!--<select id="selectModelIdByObjectId" resultType="java.lang.Integer">-->
+        <!--select-->
+        <!--a.id-->
+        <!--from-->
+        <!--tb_grade_model_detail a-->
+        <!--INNER JOIN tb_grade_object b ON a.model_id = b.model_id-->
+        <!--WHERE-->
+        <!--b.id = #{objectId}-->
+    <!--</select>-->
+    <!--<insert id="insertGradeResult" parameterType="com.cn21.opmm.domain.gradeCenter.Grade">-->
+        <!--insert into tb_grade(id, user_dept_id, grade_dept_id, grade, reason, model_detail_id, obj_id, submit_time)-->
+        <!--values-->
+        <!--<foreach collection="list" item="item" index="index" separator=",">-->
+            <!--(#{item.id},#{item.userDeptId},#{item.gradeDeptId},#{item.grade},#{item.reason},#{item.modelDetailId},#{item.objId},#{item.submitTime})-->
+        <!--</foreach>-->
+        <!--ON DUPLICATE KEY UPDATE-->
+        <!--grade = values(grade),-->
+        <!--reason = values(reason),-->
+        <!--submit_time = values(submit_time)-->
+    <!--</insert>-->
+
+    <select id="selectGradeDeptId" resultType="java.lang.Integer">
+        select id from tb_grade_dept
+        where  obj_id = #{objectId} and dept_id = #{unitId}
+    </select>
+
+</mapper>

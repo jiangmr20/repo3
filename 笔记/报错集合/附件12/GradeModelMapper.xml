@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn21.opmm.dao.gradeCenter.GradeModelMapper">
+
+    <resultMap id="gradeProject" type="com.cn21.opmm.domain.gradeCenter.GradeProject">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="user_dept_id" property="userDeptId" />
+        <result column="deptName" property="deptName" />
+        <result column="create_time" property="createTime" />
+        <result column="initiation_time" property="initiationTime" />
+        <result column="description" property="description" />
+        <result column="requirement" property="requirement" />
+        <result column="attachId" property="attachId" />
+        <result column="is_submit" jdbcType="TINYINT" property="hasSubmit" />
+        <result column="gradeRange" property="gradeRange" />
+    </resultMap>
+
+    <resultMap id="grade" type="com.cn21.opmm.domain.gradeCenter.Grade">
+        <id column="id" property="id" />
+        <result column="user_dept_id" property="userDeptId" />
+        <result column="grade_dept_id" property="gradeDeptId" />
+        <result column="grade" property="grade" />
+        <result column="reason" property="reason" />
+        <result column="model_detail_id" property="modelDetailId" />
+        <result column="obj_id" property="objectId" />
+        <result column="submit_time" property="submitTime" />
+    </resultMap>
+
+    <resultMap id="gradeModel" type="com.cn21.opmm.domain.gradeCenter.GradeModel">
+        <id column="id" property="id" />
+        <result column="user_dept_id" property="userDeptId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="name" property="name" />
+        <result column="model_type" property="modelType" />
+        <result column="status" property="status" />
+        <collection property="detailList" ofType="com.cn21.opmm.domain.gradeCenter.GradeModelDetail">
+            <id column="detailId" property="id" />
+            <result column="model_id" property="modelId" />
+            <result column="direction" property="direction" />
+            <result column="title" property="title" />
+            <result column="description" property="description" />
+            <result column="weight" property="weight" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="gradeModelDetail" type="com.cn21.opmm.domain.gradeCenter.GradeModelDetail">
+        <id column="id" property="id" />
+        <result column="model_id" property="modelId" />
+        <result column="direction" property="direction" />
+        <result column="title" property="title" />
+        <result column="description" property="description" />
+        <result column="weight" property="weight" />
+    </resultMap>
+
+    <select id="selectListFromGradeModel" resultMap="gradeModel">
+        SELECT
+        id,
+        user_dept_id,
+        update_time,
+        name,
+        status
+        FROM
+        tb_grade_model
+        WHERE
+        model_type = 1
+        <if test="keyword != null">
+            and
+            name LIKE #{keyword}
+        </if>
+        order by
+        ${sort} ${order}
+        LIMIT
+        #{beforeSize}, #{pageSize}
+    </select>
+    <select id="selectCountListFromGradeModel" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM
+        tb_grade_model
+        where
+        model_type = 1
+        <if test="keyword != null">
+            and
+            name LIKE #{keyword}
+        </if>
+    </select>
+
+    <delete id="delGradeModelByModelId" parameterType="java.lang.Integer">
+        delete from tb_grade_model where id = #{id} and model_type = 1
+    </delete>
+
+    <delete id="delGradeModelDetailByModelId" parameterType="java.lang.Integer">
+        delete from tb_grade_model_detail where model_id = #{id}
+    </delete>
+
+    <select id="selectNameFromGradeModel" resultType="java.lang.Integer">
+        select count(*) from tb_grade_model where name = #{name}
+        <if test="id != null">
+            and
+            id != #{id}
+        </if>
+    </select>
+
+    <insert id="insertGradeModelByItem" keyProperty="id" parameterType="com.cn21.opmm.domain.gradeCenter.GradeModel">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_grade_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="userDeptId != null">
+                user_dept_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="modelType != null">
+                model_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userDeptId != null">
+                #{userDeptId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="modelType != null">
+                #{modelType},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateGradeModelByItem"  parameterType="com.cn21.opmm.domain.gradeCenter.GradeModel">
+        update tb_grade_model
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userDeptId != null">
+                user_dept_id = #{userDeptId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--<insert id="batchInsertGradeModelDetail" parameterType="com.cn21.opmm.domain.gradeCenter.GradeModelDetail">-->
+        <!--insert into tb_grade_model_detail-->
+        <!--(-->
+        <!--<if test="title != null">-->
+            <!--title,-->
+        <!--</if>-->
+        <!--<if test="direction != null">-->
+            <!--direction,-->
+        <!--</if>-->
+        <!--<if test="description != null">-->
+            <!--description,-->
+        <!--</if>-->
+        <!--<if test="weight != null">-->
+            <!--weight,-->
+        <!--</if>-->
+        <!--<if test="modelId != null">-->
+            <!--model_id,-->
+        <!--</if>-->
+        <!--values-->
+        <!--<foreach collection="list" item="item" index="index" separator=",">-->
+            <!--(-->
+            <!--<if test="title != null">-->
+                <!--#{item.title,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="direction != null">-->
+                <!--#{item.direction,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="description != null">-->
+                <!--#{item.description,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="weight != null">-->
+                <!--#{item.weight,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="modelId != null">-->
+                <!--#{item.modelId,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--)-->
+        <!--</foreach>-->
+    <!--</insert>-->
+
+    <select id="selectStatusFromModelJoinDetail" resultType="map">
+        SELECT
+        a.status,
+        a.name
+        FROM
+        tb_grade_model a
+        WHERE
+        a.id = #{id}
+        and
+        a.model_type = 1
+    </select>
+
+    <select id="selectGradeModelByIds" resultMap="gradeModel">
+        select tgm.*, tgmd.id as detailId, tgmd.model_id, tgmd.direction,
+        tgmd.description, tgmd.title, tgmd.weight
+        from tb_grade_model tgm
+        left join tb_grade_model_detail tgmd on tgm.id = tgmd.model_id
+        where tgm.id in
+        <foreach collection="list" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <insert id="batchInsertGradeModel" parameterType="com.cn21.opmm.domain.gradeCenter.GradeModel" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_grade_model(
+        user_dept_id, create_time, update_time, name, model_type, status
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userDeptId},#{item.createTime},#{item.updateTime},
+            #{item.name},#{item.modelType},#{item.status})
+        </foreach>
+    </insert>
+    <insert id="batchInsertGradeModelDetail" parameterType="com.cn21.opmm.domain.gradeCenter.GradeModelDetail">
+        insert into tb_grade_model_detail(
+        model_id, direction, title, description, weight
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.modelId},#{item.direction},#{item.title},
+            #{item.description},#{item.weight})
+        </foreach>
+    </insert>
+    <update id="updateGradeModel" parameterType="com.cn21.opmm.domain.gradeCenter.GradeModel">
+        update tb_grade_model
+        <set>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id} and status = 0 and model_type = 2
+    </update>
+
+    <delete id="deleteGradeModelDetailByModelId" parameterType="java.lang.Integer">
+        delete from tb_grade_model_detail where model_id = #{id}
+    </delete>
+
+    <select id="selectGradeModelCountByUserDeptId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from tb_grade_model
+        where
+        <if test="id != null">
+            id = #{id} and
+        </if>
+        user_dept_id = #{userId,jdbcType=INTEGER}
+        and status &lt;&gt; 0
+    </select>
+
+    <select id="selectGradeModelByMap" resultMap="gradeModel">
+        select tgm.*, tgmd.id as detailId, tgmd.model_id,
+        tgmd.direction, tgmd.title, tgmd.description, tgmd.weight
+        from tb_grade_model tgm
+        left join tb_grade_model_detail tgmd on tgmd.model_id = tgm.id
+        where 1=1
+        <if test="id != null">
+            and tgm.id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            and tgm.status = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="modelType != null">
+            and tgm.model_type = #{modelType,jdbcType=TINYINT}
+        </if>
+    </select>
+</mapper>
