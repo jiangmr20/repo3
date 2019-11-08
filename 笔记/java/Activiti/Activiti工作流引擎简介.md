@@ -2,7 +2,7 @@ https://www.imooc.com/article/details/id/35590
 
 https://coding.imooc.com/class/226.html?mc_marking=c82ce46f7b13f6d766c5cb6622ebbf0d&mc_channel=shouji
 
-![1571626778424](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1571626778424.png)
+![1571626778424](E:\学习\笔记\picRepo\1571626778424.png)
 
 https://my.oschina.net/u/2391658/blog/724380
 
