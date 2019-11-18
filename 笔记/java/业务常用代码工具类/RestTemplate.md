@@ -16,3 +16,17 @@ public void rtPostObject(){
 }
 ```
 
+使用介绍：
+
+https://www.jianshu.com/p/90ec27b3b518
+
+https://www.jianshu.com/p/0fd5f3f64137
+
+https://blog.csdn.net/ONROAD0612/article/details/82258193
+
+
+
+（官网）RestTemplate在spring中的完整api：https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
+
+api详解：https://www.cnblogs.com/wangbin2188/p/9204022.html
+
