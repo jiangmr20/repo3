@@ -1,0 +1,17 @@
+如，在某个业务中，输入的参数可能是任意字段的，需要查询，则sql怎么写，写法如下：
+
+模糊查询：
+
+```sql
+...
+where 1=1
+        <if test='isCheck==false'>
+            and handler=#{userId}
+        </if>
+        <if test="keyword!='' ">
+            and (instr(product_name,#{keyword}) &gt; 0 or instr(intro,#{keyword})&gt; 0 or instr(keyword,#{keyword})&gt;
+            0)
+        </if>
+        ...
+```
+
