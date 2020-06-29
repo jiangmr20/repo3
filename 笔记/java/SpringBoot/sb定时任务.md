@@ -32,3 +32,17 @@ public class FlushRedisTask {
 
 ```
 
+
+
+personal example:
+
+```java
+@Scheduled(cron = "0 */1 * * * ?")
+    public void expireNotice() {
+        logger.info("Scheduled expire notice message start ---");
+        commonNoticeMapper.updateExpireNotice();
+        logger.info("Scheduled expire notice message end ---");
+    }
+//一分钟更新一次
+```
+
