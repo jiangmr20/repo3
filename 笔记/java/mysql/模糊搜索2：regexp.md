@@ -44,3 +44,14 @@ select * from a where name like 'a%' or name like 'b%' ....or ...;
 select * from a where name regexp'a|b|...';
 ```
 
+
+
+
+
+例子：搜索数据格式为手机号码的
+
+```sql
+select * from tb_user
+        where link_num regexp ('(^(1[35]3|177|18[019]|19[19])[0-9]{8}$|^(1349|1401|170[0-2]|1740)[0-9]{7}$)')
+```
+

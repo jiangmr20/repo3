@@ -20,3 +20,13 @@
 1）通过主从备份解决数据安全性问题； 
 2）通过数据库代理中间件心跳监测，解决单点故障问题； 
 3）通过代理中间件将查询语句分发到各个slave节点进行查询，并汇总结果 
+
+
+
+========漫画教学
+
+https://developer.51cto.com/art/201904/594615.htm
+
+========文字介绍
+
+http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html
